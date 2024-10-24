@@ -53,5 +53,7 @@ public class CombineClient {
   // combinare e ne emette il risultato della combinazione (separando gli interi
   // uno per linea). Può avvalersi della funzione precedente per decodificare
   // ciascuna delle due linee in ingresso.
-
+  private static void main(int[] args) {
+    
+  }
 }
