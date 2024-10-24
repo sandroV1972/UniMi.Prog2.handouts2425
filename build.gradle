@@ -1,0 +1,66 @@
+plugins {
+  id 'java'
+}
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven {
+    url = uri('https://gitlab.di.unimi.it/api/v4/projects/7715/packages/maven')
+  }
+}
+
+dependencies {
+  testImplementation 'it.unimi.di.prog2:jubbiot:0.4a0'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+  useJUnitPlatform()
+  testLogging {
+    events 'skipped', 'failed'
+    afterSuite { desc, result ->
+      if (!desc.parent) {
+        println "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+      }
+    }
+  }
+  defaultCharacterEncoding = 'UTF-8'
+}
+
+tasks.withType(JavaExec) {
+  enableAssertions = project.hasProperty('enableAssertions') ? project.getProperty('enableAssertions') : false
+}
+
+tasks.register("runClass", JavaExec) {
+  dependsOn build
+  group = 'Execution'
+  description = 'Runs the main method of a class given its fully qualified name.'
+  mainClass = project.hasProperty('mainClass') ? project.getProperty('mainClass') : 'my.pkg.Example'
+  defaultCharacterEncoding = 'UTF-8'
+}
+
+javadoc {
+  options {
+    encoding = 'UTF-8'
+    charSet = 'UTF-8'
+    links = [ 'https://docs.oracle.com/en/java/javase/17/docs/api/' ]
+    docTitle = 'Programmazione II @ UniMI'
+    overview = 'src/overview.html'
+    header = '<script type=\'text/javascript\' src=\'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\'></script>'
+    showFromPrivate()
+    addStringOption 'Xdoclint:all,-missing', '-quiet'
+    addBooleanOption 'Werror', true
+    addBooleanOption '-allow-script-in-comments', true
+  }
+}
