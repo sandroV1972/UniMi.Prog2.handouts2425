@@ -21,8 +21,6 @@ along with this file.  If not, see <https://www.gnu.org/licenses/>.
 
 package it.unimi.di.prog2.e06;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**

@@ -22,6 +22,8 @@ along with this file.  If not, see <https://www.gnu.org/licenses/>.
 package it.unimi.di.prog2.e09;
 
 import it.unimi.di.prog2.h08.impl.NegativeExponentException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +46,7 @@ public class SparsePoly {
      *
      * @throws NegativeExponentException if if {@code degree} &lt; 0.
      */
-    public Term { // using the compact constructor
+    public Term { // using the compact constructors
       if (degree < 0)
         throw new NegativeExponentException("A term cannot have a negative exponent.");
     }
@@ -55,7 +57,7 @@ public class SparsePoly {
 
   /** Initializes this to be the zero polynomial, that is \( p = 0 \). */
   public SparsePoly() {
-    terms = null; // replace this with the actual implementation
+    this.terms = new ArrayList<>();
   }
 
   /**
@@ -66,7 +68,41 @@ public class SparsePoly {
    * @throws NegativeExponentException if {@code n} &lt; 0.
    */
   public SparsePoly(int c, int n) throws NegativeExponentException {
-    terms = null; // replace this with the actual implementation
+    this.terms = new ArrayList<>();
+    this.terms.add(new Term(c, n));; // replace this with the actual implementation
+  }
+
+  /**
+   * Clona un oggetto SparsePoly.
+   *
+   * @param p il polinomio da clonare.
+   * @return una copia del polinomio dato.
+   */
+  public SparsePoly clone() {
+    SparsePoly clone = new SparsePoly();
+    for (Term term : this.terms) {
+      clone.terms.add(new Term(term.coeff(), term.degree()));
+    }
+    return clone;
+  }
+
+
+  /**
+   * Retrieve the index of a term with specified degree.
+   *
+   * <p>return the index of the term with a specific degree.
+   *
+   * @param d the degree of the term we are serching.
+   * @return the index in the List<> of Terms.
+   *         -1 if no term with that degree is found
+   */
+  public int getIndex(int d) {
+    for (int i = 0; i < terms.size(); i++) {
+      if (terms.get(i).degree() == d) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   /**
@@ -76,6 +112,11 @@ public class SparsePoly {
    * @return the coefficient of the considered term.
    */
   public int coeff(int d) {
+    for (Term term : terms) {
+      if (term.degree() == d) {
+        return term.coeff();
+      }
+    }
     return 0; // replace this with the actual implementation
   }
 
@@ -86,7 +127,14 @@ public class SparsePoly {
    *     Poly}.
    */
   public int degree() {
-    return 0; // replace this with the actual implementation
+    int max_d = terms.get(0).degree;
+    for (Term term : terms) {
+      if (term.degree() > max_d) {
+        max_d = term.degree();
+      }
+    }
+    return max_d;
+    //return 0; // replace this with the actual implementation
   }
 
   /**
@@ -99,8 +147,31 @@ public class SparsePoly {
    * @throws NullPointerException if {@code q} is {@code null}.
    */
   public SparsePoly add(SparsePoly q) throws NullPointerException {
-    return null; // replace this with the actual implementation
+    if (q == null) throw new NullPointerException();
+    SparsePoly r = new SparsePoly();
+    
+    for (Term t : this.terms) {
+      r.terms.add(new Term(t.coeff(), t.degree()));
+    }
+    
+    for (Term t : q.terms) {
+      int index = r.getIndex(t.degree());
+      if (index != -1) {
+        Term existingTerm = r.terms.get(index);
+        int newCoeff = existingTerm.coeff() + t.coeff();
+        if (newCoeff != 0) {
+          r.terms.set(index, new Term(newCoeff, t.degree()));
+        } else {
+          r.terms.remove(index);
+        }
+      } else {
+        r.terms.add(new Term(t.coeff(), t.degree()));
+      }
+    }
+    
+    return r;
   }
+
 
   /**
    * Performs polynomial multiplication.
@@ -112,7 +183,29 @@ public class SparsePoly {
    * @throws NullPointerException if {@code q} is {@code null}.
    */
   public SparsePoly mul(SparsePoly q) throws NullPointerException {
-    return null; // replace this with the actual implementation
+    if (q == null) throw new NullPointerException();
+    if ((q.terms.size() == 0 || this.terms.size() == 0) || ((q.degree() == 0 && q.coeff(0) == 0) || (this.degree() == 0 && this.coeff(0) == 0))) return new SparsePoly();
+    SparsePoly r = new SparsePoly();
+    int c, d;
+    for (Term t : this.terms) {
+      for (Term tt : q.terms) {
+        d = t.degree() + tt.degree();
+        c = t.coeff() * tt.coeff();
+        int index = r.getIndex(d);
+        if (index != -1) {
+          Term existingTerm = r.terms.get(index);
+          int newCoeff = existingTerm.coeff() + c;
+          if (newCoeff != 0) {
+            r.terms.set(index, new Term(newCoeff, d));
+          } else {
+            r.terms.remove(index);
+          }
+        } else {
+          r.terms.add(new Term(c, d));
+        }
+      }
+    }
+    return r;
   }
 
   /**
@@ -125,7 +218,8 @@ public class SparsePoly {
    * @throws NullPointerException if {@code q} is {@code null}.
    */
   public SparsePoly sub(SparsePoly q) throws NullPointerException {
-    return null; // replace this with the actual implementation
+    if (q == null) throw new NullPointerException();
+    return add(q.minus()); // replace this with the actual implementation
   }
 
   /**
@@ -136,6 +230,9 @@ public class SparsePoly {
    * @return this polynomial multiplied by \( -1 \).
    */
   public SparsePoly minus() {
-    return null; // replace this with the actual implementation
+    SparsePoly r = new SparsePoly();
+    for (Term term: terms) 
+      r.terms.add(new Term(-term.coeff(), term.degree()));
+    return r; // replace this with the actual implementation
   }
 }
