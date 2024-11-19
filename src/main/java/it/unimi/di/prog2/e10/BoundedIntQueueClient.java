@@ -37,7 +37,7 @@ public class BoundedIntQueueClient {
    * @param args not used.
    */
 
-  /* - Uncomment the following after completing the implementation of BoundedIntQueue
+  //- Uncomment the following after completing the implementation of BoundedIntQueue
 
    public static void main(String[] args) {
     BoundedIntQueue queue = new BoundedIntQueue(10);
@@ -51,5 +51,5 @@ public class BoundedIntQueueClient {
     System.out.println(queue);
   }
 
-  */
+
 }
