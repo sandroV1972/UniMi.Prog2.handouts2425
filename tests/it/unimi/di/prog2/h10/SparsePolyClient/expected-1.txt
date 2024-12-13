@@ -1,0 +1,1 @@
+SparsePoly: 6x^4 + 6x^3 + 3x^2

@@ -21,6 +21,8 @@ along with this file.  If not, see <https://www.gnu.org/licenses/>.
 
 package it.unimi.di.prog2.e12;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -30,13 +32,47 @@ import java.util.NoSuchElementException;
  * strings and the values are integers. The map cannot contain duplicate keys, which means that each
  * key can be associated to at most one value.
  */
+
+
+  /*
+   * A <em>Map</em> is a collection, a data structure, that links a key to a value.
+   * The keys is unique. 
+   * A <em>StringToIntMap</em> is a map where the key is a string and the value is an Integer.
+   * 
+   */
 public class StringToIntMap {
 
   // EXERCISE: provide a representation, together with its AF and RI
   // Note: do not use the Map in Java Collections, the point is to implement it from scratch!
 
+  // the total number of key-value in the map
+  private int size;
+
+  // the List of Strings representing the keys of the map
+  private final List<String> keys;
+
+  // the List if integers representing the values of the map
+  private final List<Integer> values;
+
+    /*-
+   * AF:
+   *
+   *  AF(keys, values) =
+   *      [keys[0], keys[1], ..., keys[n-1]] se l'inidice index   0 <= index < n
+   *      [values[0], values[1], ..., values[n-1]] se l'inidice index   0 <= index < n 
+   *      l'associazione key value è basata sull'indice 
+   * RI:
+   *
+   *  - keys or values are not null and have equal length equal to the number of items in the List
+   *  - keys are String and are unique
+   *  - values are integers and have the same index of the correpsonding key
+   *
+   */
   /** Creates a new empty map. */
-  public StringToIntMap() {}
+  public StringToIntMap() {
+    keys = new ArrayList<String>();
+    values = new ArrayList<Integer>();
+  }
 
   /**
    * Returns the size of this map.
@@ -44,15 +80,16 @@ public class StringToIntMap {
    * @return the number of key-value mappings in this map.
    */
   public int size() {
-    return 0;
+    return size;
   }
 
   /**
    * Returns if this map is empty.
    *
-   * @return {@code true} iff this map contains no key-value mappings.
+   * @return {@code true} if this map contains no key-value mappings.
    */
   public boolean isEmpty() {
+    if (size != 0) return true; 
     return false;
   }
 
@@ -63,6 +100,7 @@ public class StringToIntMap {
    * @return {@code true} iff this map contains a key-value mappings with the given {@code key}.
    */
   public boolean containsKey(String key) {
+    if (keys.indexOf(key) >= 0) return true;
     return false;
   }
 
@@ -73,6 +111,7 @@ public class StringToIntMap {
    * @return {@code true} iff this map contains a key-value mappings with the given {@code value}.
    */
   public boolean containsValue(int value) {
+    if (values.indexOf(Integer.valueOf(value)) >= 0) return true;
     return false;
   }
 
@@ -84,7 +123,11 @@ public class StringToIntMap {
    * @throws NoSuchElementException if this map contains no mapping for the key.
    */
   public int get(String key) throws NoSuchElementException {
-    return 0;
+    int index = keys.indexOf(key);
+    if (index == -1) {
+      throw new NoSuchElementException ("Elemento di chiave key non trovato.");
+    }
+    return values.get(index);
   }
 
   /**
@@ -96,6 +139,14 @@ public class StringToIntMap {
    *     modified by this operation.
    */
   public boolean put(String key, int value) {
+    if (!this.containsKey(key)) {
+      keys.add(key);
+      values.add(Integer.valueOf(value));
+      size++;
+      return true;
+    } else {
+      values.set(keys.indexOf(key), Integer.valueOf(value));
+    }
     return false;
   }
 
@@ -107,9 +158,20 @@ public class StringToIntMap {
    *     modified by this operation.
    */
   public boolean remove(String key) {
+    if(this.containsKey(key)) {
+      int index = keys.indexOf(key);
+      keys.remove(index);
+      values.remove(index);
+      size--;
+      return true;
+    }
     return false;
   }
 
   /** Removes all of the mappings from this map. */
-  public void clear() {}
+  public void clear() {
+    keys.clear();
+    values.clear();
+    size = 0;
+  }
 }

@@ -5,6 +5,11 @@
     "version": "0.2.0",
     "configurations": [
 
+
+
+
+
+
         {
             "type": "java",
             "name": "Current File",
@@ -13,10 +18,33 @@
         },
         {
             "type": "java",
-            "name": "BoundedIntQueClient",
+            "name": "IntRangeClient",
             "request": "launch",
-            "mainClass": "it.unimi.di.prog2.e10.BoundedIntQueueClient",
+            "mainClass": "it.unimi.di.prog2.e15.IntRangeClient",
+            "projectName": "handouts-aa2425"
+        },
+        {
+            "type": "java",
+            "name": "StringIteratorsClient",
+            "request": "launch",
+            "mainClass": "it.unimi.di.prog2.e15.StringIteratorsClient",
+            "projectName": "handouts-aa2425"
+        },
+        {
+            "type": "java",
+            "name": "HistogramClient",
+            "request": "launch",
+            "mainClass": "it.unimi.di.prog2.e17.HistogramClient",
+            "projectName": "handouts-aa2425"
+        },
+        {
+            "type": "java",
+            "name": "AstronomicalSystemClient",
+            "request": "launch",
+            "args": "1",
+            "mainClass": "it.unimi.di.prog2.e18.AstronomicalSystemClient",
             "projectName": "handouts-aa2425"
         }
+    ]
     ]
 }

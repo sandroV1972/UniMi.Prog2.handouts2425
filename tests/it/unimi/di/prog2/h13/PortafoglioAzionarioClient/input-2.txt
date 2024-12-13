@@ -1,0 +1,8 @@
++ Apple 100 10
++ Google 50 20
+- Apple 5
+- Google 10
+?
+- Google 5
+?
+

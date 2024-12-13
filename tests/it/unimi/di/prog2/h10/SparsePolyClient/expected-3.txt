@@ -1,0 +1,1 @@
+SparsePoly: 24x^19 + 12x^13 + 4x^7
